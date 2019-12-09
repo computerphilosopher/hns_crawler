@@ -9,7 +9,7 @@ import openpyxl
 
 def get_urls():
     
-    wb = openpyxl.load_workbook('hns.xlsx')
+    wb = openpyxl.load_workbook('hns.xlsx', data_only=True)
     sheet = wb['Sheet1']
 
     ret = []
@@ -67,11 +67,11 @@ def get_soldout_list(urls, sleep_time):
     ret = []
 
     for url in urls:
+        print('access to ', url + "....")
         req = requests.get(url)
         html = req.text
 
         soup = BeautifulSoup(html, 'html.parser')
-        print('access to ', url + "....")
 
         if req.status_code != 200:
             print('접속 불가')
@@ -91,7 +91,7 @@ def get_soldout_list(urls, sleep_time):
 
 if __name__ == "__main__":
     urls = get_urls()
-    sleep_time = 5 if len(argv) == 1 else int(argv[1])
+    sleep_time = 0 if len(argv) == 1 else int(argv[1])
     while True:
         send(get_soldout_list(urls, sleep_time))
         sleep(7200)
